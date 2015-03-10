@@ -1,0 +1,41 @@
+{
+  "name": "grammkit",
+  "version": "0.1.0",
+  "description": "A tool to generate diagrams for parser grammars",
+  "main": "grammkit.js",
+  "dependencies": {
+    "bootstrap": "^3.3.2",
+    "browser-request": "^0.3.3",
+    "pegjs": "^0.8.0",
+    "railroad-diagrams": "^1.0.0",
+    "react": "^0.12.2"
+  },
+  "devDependencies": {
+    "jsx-loader": "^0.12.2",
+    "react-hot-loader": "^1.1.1",
+    "webpack": "^1.7.0",
+    "webpack-dev-server": "1.6.4"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dundalek/GrammKit"
+  },
+  "keywords": [
+    "railroad",
+    "syntax",
+    "diagram",
+    "parser",
+    "grammar",
+    "generator",
+    "svg"
+  ],
+  "author": "Jakub Dundalek",
+  "license": "Unlicence",
+  "bugs": {
+    "url": "https://github.com/dundalek/GrammKit/issues"
+  },
+  "homepage": "https://github.com/dundalek/GrammKit"
+}
