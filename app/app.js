@@ -34,13 +34,8 @@ var App = React.createClass({
   render() {
     var e = this.state.syntaxError;
     return (
-      <div className="container">
-        <h1>GrammKit</h1>
+      <div>
         <div className="col-md-6">
-          <p>
-          Generate diagrams for parser grammars.
-          </p>
-          
           <div className={cx('load-input', 'row', {'has-error': this.state.loadError})}>
             <div className="col-md-8 col-sm-8 col-xs-7">
               <input className="form-control" type="text" valueLink={this.linkState('link')} onKeyPress={this.onKeyPress} placeholder="e.g. http://server.com/grammar.pegjs" />

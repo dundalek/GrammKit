@@ -1,10 +1,29 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Generate diagrams for parser grammars">
+    <meta name="author" content="Jakub Dundalek">
+
     <title>GrammKit</title>
+
     <link rel='stylesheet' href='bootstrap.min.css'>
     <link rel='stylesheet' href='style.css'>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
   <body>
+    <div class="container">
+      <h1>GrammKit</h1>
+      <p>Generate syntax diagrams (also known as railroad diagrams) for parser grammars written in <a href="http://pegjs.org/documentation#grammar-syntax-and-semantics">PEG.js</a>. Check out the <a href="https://github.com/dundalek/GrammKit">source code</a>. Created by <a href="http://dundalek.com/">Jakub Dundalek</a>.</p>
+      <div id="app"></app>
+    </div>
     <script src="bundle.js"></script>
   </body>
 </html>
