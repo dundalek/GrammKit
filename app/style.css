@@ -30,14 +30,6 @@ input[type=text].form-control, textarea.form-control {
   background-color:  hsl(30,20%,98%);;
 }
 
-.load-input input {
-  /*width: 100%;*/
-}
-
-.load-input button {
-  /*margin-left: 10px;*/
-}
-
 .load-examples {
   margin-left: 20px;
   margin-top: 10px;
