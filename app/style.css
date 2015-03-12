@@ -43,6 +43,7 @@ input[type=text].form-control, textarea.form-control {
 textarea.form-control.grammar-edit {
   height: 400px;
   margin-bottom: 20px;
+  font-family: monospace;
 }
 
 .alert {
