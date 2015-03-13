@@ -74,7 +74,7 @@ var App = React.createClass({
           {this.state.rules.map(rule =>
             <div>
               <h3 id={rule.name}>{rule.name}</h3>
-              <div dangerouslySetInnerHTML={{__html: rule.diagram}}/>
+              <div dangerouslySetInnerHTML={{__html: rule.diagram}} onClick={this.onClickDiagram} />
             </div>
           )}
         </div>
@@ -99,6 +99,13 @@ var App = React.createClass({
     if (ev.which === 13) {
       // load grammar on enter
       this.loadGrammar(this.state.link);
+    }
+  },
+  
+  onClickDiagram(ev) {
+    // if the node was clicked then go to rule definition
+    if (ev.target.tagName === 'text') {
+      location.hash = ev.target.textContent;
     }
   },
   
