@@ -32,12 +32,18 @@ var App = React.createClass({
   getInitialState() {
     return {
       examples: examples,
-      rules: []
+      grammarAst: {rules: []}
     };
   },
   
   render() {
     var e = this.state.syntaxError;
+    var rules = this.state.grammarAst.rules.map(function(rule) {
+      return {
+        name: rule.name,
+        diagram: diagram(rule)
+      };
+    });
     return (
       <div>
         <div className="col-md-6">
@@ -71,7 +77,7 @@ var App = React.createClass({
         </div>
         
         <div className="col-md-6">
-          {this.state.rules.map(rule =>
+          {rules.map(rule =>
             <div>
               <h3 id={rule.name}>{rule.name}</h3>
               <div dangerouslySetInnerHTML={{__html: rule.diagram}} onClick={this.onClickDiagram} />
@@ -123,12 +129,7 @@ var App = React.createClass({
     }
 
     state.syntaxError = null;
-    state.rules = ast.rules.map(function(rule) {
-      return {
-        name: rule.name,
-        diagram: diagram(rule)
-      };
-    });
+    state.grammarAst = ast;
     this.setState(state);
   },
   
