@@ -5,6 +5,7 @@ var cx = require('classnames');
 
 var parse = require('pegjs/lib/parser').parse;
 var diagram = require('../lib/diagram');
+var getReferences = require('../lib/peg-references');
 
 var examples = require('./examples.json');
 var exampleGrammar = examples[0].source;
@@ -44,6 +45,7 @@ var App = React.createClass({
         diagram: diagram(rule)
       };
     });
+    var references = getReferences(this.state.grammarAst);
     return (
       <div>
         <div className="col-md-6">
@@ -81,6 +83,16 @@ var App = React.createClass({
             <div>
               <h3 id={rule.name}>{rule.name}</h3>
               <div dangerouslySetInnerHTML={{__html: rule.diagram}} onClick={this.onClickDiagram} />
+              {references[rule.name].usedBy.length > 0 && <div>
+                Used By: {references[rule.name].usedBy.map(rule =>
+                  <a href={'#' + rule}> {rule} </a>
+                )}
+              </div>}
+              {references[rule.name].references.length > 0 && <div>
+                References: {references[rule.name].references.map(rule =>
+                  <a href={'#' + rule}> {rule} </a>
+                )}
+              </div>}
             </div>
           )}
         </div>
