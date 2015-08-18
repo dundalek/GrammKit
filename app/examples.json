@@ -2,6 +2,9 @@
   "name": "Arithmetic",
   "source": "start\n    = additive\n\n  additive\n    = left:multiplicative \"+\" right:additive { return left + right; }\n    / multiplicative\n\n  multiplicative\n    = left:primary \"*\" right:multiplicative { return left * right; }\n    / primary\n\n  primary\n    = integer\n    / \"(\" additive:additive \")\" { return additive; }\n\n  integer \"integer\"\n    = digits:[0-9]+ { return parseInt(digits.join(\"\"), 10); }"
 }, {
+  "name": "SPARQL",
+  "link": "examples/sparql.ebnf"
+}, {
   "name": "ArchieML",
   "link": "https://cdn.rawgit.com/dundalek/archieml-peg/6d882f42de57d850f72772cde9aadc7a4ee579bf/aml.parser.pegjs"
 }, {

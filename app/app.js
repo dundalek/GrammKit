@@ -4,6 +4,7 @@ var debounce = require('debounce');
 var cx = require('classnames');
 
 var parse = require('pegjs/lib/parser').parse;
+var parseEbnf = require('../lib/parse-ebnf.pegjs').parse;
 var diagram = require('../lib/diagram');
 var getReferences = require('../lib/peg-references');
 
@@ -136,6 +137,15 @@ var App = React.createClass({
     } catch (e) {
       e.lineCode = grammar.split('\n')[e.line-1];
       state.syntaxError = e;
+      try {
+        ast = parseEbnf(grammar);
+        state.syntaxError = null;
+      } catch (e) {
+        // ignore EBNF error, report only PEG error
+      }
+    }
+    
+    if (state.syntaxError) {
       this.setState(state);
       return;
     }

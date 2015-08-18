@@ -28,7 +28,8 @@ module.exports = function(options) {
     module: {
       loaders: [
         { test: /\.jsx?$/, loaders: options.hot ? ['react-hot', 'jsx?harmony'] : ['jsx?harmony'], exclude: /node_modules/ },
-        { test: /\.json$/, loaders: ['json']}
+        { test: /\.json$/, loaders: ['json']},
+        { test: /\.pegjs$/, loaders: ['pegjs']}
       ]
     }
   };

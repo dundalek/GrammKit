@@ -28,7 +28,7 @@ gulp.task("webpack", function() {
       .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('copy', ['copy:files', 'copy:libs']);
+gulp.task('copy', ['copy:files', 'copy:libs', 'copy:examples']);
 
 gulp.task('copy:libs', function() {
   return gulp.src('node_modules/bootstrap/dist/css/bootstrap.min.css', {base: 'node_modules/bootstrap/dist/css/'})
@@ -38,4 +38,9 @@ gulp.task('copy:libs', function() {
 gulp.task('copy:files', function() {
   return gulp.src('app/{index.html,style.css}', {base: 'app/'})
     .pipe(gulp.dest('dist/'));
+});
+
+gulp.task('copy:examples', function() {
+  return gulp.src('examples/*.*')
+    .pipe(gulp.dest('dist/examples'));
 });
