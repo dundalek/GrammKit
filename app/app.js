@@ -129,29 +129,24 @@ var App = React.createClass({
   },
   
   updateGrammar(grammar) {
-    var state = {grammar: grammar};
-    var ast;
+    var state = {
+      grammar: grammar,
+      syntaxError: null
+    };
     
     try {
-      ast = parse(grammar);
+      state.grammarAst = parse(grammar);
     } catch (e) {
       e.lineCode = grammar.split('\n')[e.line-1];
       state.syntaxError = e;
       try {
-        ast = parseEbnf(grammar);
+        state.grammarAst = parseEbnf(grammar);
         state.syntaxError = null;
       } catch (e) {
         // ignore EBNF error, report only PEG error
       }
     }
-    
-    if (state.syntaxError) {
-      this.setState(state);
-      return;
-    }
 
-    state.syntaxError = null;
-    state.grammarAst = ast;
     this.setState(state);
   },
   
