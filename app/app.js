@@ -21,7 +21,7 @@ var App = React.createClass({
     this.updateGrammarDebounced = debounce(this.updateGrammar, 150).bind(this);
     if (location.hash) {
       var hash = location.hash.replace(/^#/, '');
-      if (hash.match(/^https?:\/\//)) {
+      if (hash.match(/^https?:\/\/|\.\//)) {
         this.loadGrammar(hash);
       } else {
         this.updateGrammar(decodeURIComponent(hash));
