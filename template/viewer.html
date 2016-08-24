@@ -7,15 +7,48 @@
 			{{style}}
 		</style>
 		<style>
+			body {
+				font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+			}
+			.rule {
+				padding-top: 4em;
+			}
 			.container {
 				margin: auto;
 				padding: 2em;
 			}
 		</style>
+		<script>
+			function svgBlockClick(ev) {
+				if(ev.target.tagName === 'text') {
+					location.hash = ev.target.textContent;
+				}
+			}
+			</script>
 	</head>
 	<body>
 		<div class="container">
-			{{{svg}}}
+			<h1>{{title}}</h1>
+			{{#rules}}
+			  <div class="rule">
+					<h2 id={{name}}>{{name}}</h2>
+					<div onclick=svgBlockClick>
+						{{{diagram}}}
+					</div>
+					<div>
+						Used by:
+						{{#usedBy}}
+						<a href="#{{this}}">{{this}}</a>
+						{{/usedBy}}
+					</div>
+					<div>
+						References:
+						{{#references}}
+						<a href="#{{this}}">{{this}}</a>
+						{{/references}}
+					</div>
+				</div>
+			{{/rules}}
 		</div>
 	</body>
 </html>
