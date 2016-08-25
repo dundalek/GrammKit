@@ -26,14 +26,14 @@ var genHtml = function(title, rules) {
 
 program
     .version(version)
-    .usage('[options] <grammer_file>')
+    .usage('[options] <grammar_file>')
     .option('-o, --output <output>', 'output file', null)
     .parse(process.argv);
 
 var input = program.args[0] || null;
 
 if (!input) {
-    console.error('ERROR: Missing a required input grammer file.');
+    console.error('ERROR: Missing a required input grammar file.');
     console.log(program.help());
     process.exit(1)
 }
