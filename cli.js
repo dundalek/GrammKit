@@ -10,6 +10,9 @@ var parse = require('pegjs/lib/parser').parse;
 var grammkit = require('./grammkit');
 var getReferences = require('./lib/peg-references');
 
+var peg = require('pegjs');
+var parseEbnf = peg.buildParser(fs.readFileSync('./lib/parse-ebnf.pegjs', 'utf-8')).parse;
+
 var version = require('./package.json').version;
 
 var genHtml = function(title, rules) {
@@ -48,7 +51,20 @@ if (program.output === null) {
     program.output = path.format(p);
 }
 
-var grammar = parse(fs.readFileSync(input, 'utf-8'));
+var content = fs.readFileSync(input, 'utf-8');
+var grammar;
+try {
+    grammar = parse(content);
+} catch (pegError) {
+    try {
+        grammar = parseEbnf(content);
+    } catch (ebnfError) {
+        console.log('Cannot parse the grammar.')
+        console.log('PEG error', pegError);
+        console.log('EBNF error', ebnfError);
+        process.exit(1);
+    }
+}
 var References = getReferences(grammar);
 var rules = grammar.rules.map(function(rule) {
     const _ref = References[rule.name] || null;
