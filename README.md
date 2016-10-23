@@ -8,6 +8,12 @@ Currently two grammar formats are supported:
 
 Is uses the [railroad-diagrams](https://github.com/tabatkins/railroad-diagrams) library to generate SVG images.
 
+## Use the command line utility
+
+`npm install -g grammkit`
+
+To generate static html page run `grammkit yourgrammar.peg`.
+
 ## Use the library
 
 `npm install grammkit`
