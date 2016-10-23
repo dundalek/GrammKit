@@ -84,12 +84,12 @@ var App = React.createClass({
             <div>
               <h3 id={rule.name}>{rule.name}</h3>
               <div dangerouslySetInnerHTML={{__html: rule.diagram}} onClick={this.onClickDiagram} />
-              {references[rule.name].usedBy.length > 0 && <div>
+              {references[rule.name] && references[rule.name].usedBy.length > 0 && <div>
                 Used By: {references[rule.name].usedBy.map(rule =>
                   <a href={'#' + rule}> {rule} </a>
                 )}
               </div>}
-              {references[rule.name].references.length > 0 && <div>
+              {references[rule.name] && references[rule.name].references.length > 0 && <div>
                 References: {references[rule.name].references.map(rule =>
                   <a href={'#' + rule}> {rule} </a>
                 )}
