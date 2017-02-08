@@ -31,3 +31,10 @@ grammkit.diagram(grammar.rules[0]);
 The SVG renders as:
 
 ![Diagram Example](example.png)
+
+## Related projects
+
+List of other project worth checking out.
+
+- [jison debugger](http://nolanlawson.github.io/jison-debugger/) - interesting visualization of a parse tree for jison grammars
+- [ohm interactive editor](https://ohmlang.github.io/editor/) - online editor for ohm grammars that also visualizes parse tree
