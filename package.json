@@ -4,6 +4,8 @@
   "description": "A tool to generate diagrams for parser grammars",
   "main": "grammkit.js",
   "scripts": {
+    "dev": "gulp dev",
+    "build": "gulp build",
     "test": "jest"
   },
   "bin": "./cli.js",

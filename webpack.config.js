@@ -3,7 +3,7 @@ var webpack = require('webpack');
 module.exports = function(options) {
   options = options || {};
   return {
-    devtool: 'eval',
+    devtool: 'source-map',
     entry: options.hot ? [
       'webpack-dev-server/client?http://localhost:3000',
       'webpack/hot/only-dev-server',
