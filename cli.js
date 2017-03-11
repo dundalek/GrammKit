@@ -11,7 +11,7 @@ var grammkit = require('./grammkit');
 var getReferences = require('./lib/peg-references');
 
 var peg = require('pegjs');
-var parseEbnf = peg.buildParser(fs.readFileSync('./lib/parse-ebnf.pegjs', 'utf-8')).parse;
+var parseEbnf = peg.buildParser(fs.readFileSync(path.join(__dirname, 'lib/parse-ebnf.pegjs'), 'utf-8')).parse;
 
 var version = require('./package.json').version;
 
