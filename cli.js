@@ -15,21 +15,17 @@ var parseEbnf = peg.buildParser(fs.readFileSync('./lib/parse-ebnf.pegjs', 'utf-8
 
 var version = require('./package.json').version;
 
-var genHtml = function(title, rules) {
-    var raw_template = fs.readFileSync(path.join(__dirname, 'template', 'viewer.html'));
-    var data = {
-        title: title,
-        style: fs.readFileSync(path.join(__dirname, 'template', 'style.css'), 'utf-8'),
-        rules: rules
-    };
+var renderTemplate = function(data, templatePath) {
+    var raw_template = fs.readFileSync(templatePath);
     var template = handlebars.compile(raw_template.toString());
     return template(data);
 }
 
-
 program
     .version(version)
     .usage('[options] <grammar_file>')
+    // .option('-f, --input-format <from>', 'input-format (auto|ebnf|pegjs) [default: auto]', /^(auto|ebnf|pegjs)$/, 'auto')
+    .option('-t, --output-format <to>', 'output format (html|md) [default: html]', /^(html|md)$/, 'html')
     .option('-o, --output <output>', 'output file', null)
     .parse(process.argv);
 
@@ -46,7 +42,7 @@ var title = p.base;
 
 if (program.output === null) {
     p.dir = '.';
-    p.ext = '.html';
+    p.ext = '.' + program.outputFormat;
     delete p.base;
     program.output = path.format(p);
 }
@@ -78,7 +74,40 @@ var rules = grammar.rules.map(function(rule) {
     };
 });
 
-var html = genHtml(title, rules)
+var output;
+if (program.outputFormat === 'html') {
+  var style = fs.readFileSync(path.join(__dirname, 'app', 'diagram.css'), 'utf-8') + '\n' + fs.readFileSync(path.join(__dirname, 'app', 'app.css'), 'utf-8')
+  var data = {
+      title: title,
+      style: style,
+      rules: rules
+  };
+  output = renderTemplate(data, path.join(__dirname, 'template', 'viewer.html'));
+} else if (program.outputFormat === 'md') {
+  var style = fs.readFileSync(path.join(__dirname, 'app', 'diagram.css'), 'utf-8')
+  var svgPreamble = `<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">`;
+  var svgHeader = `<defs><style type="text/css"><![CDATA[ ${style} ]]></style></defs>`
+  delete p.ext;
+  var imageDir = path.format(p);
+  var data = {
+      title: title,
+      rules: rules,
+      imageDir: imageDir
+  };
+  output = renderTemplate(data, path.join(__dirname, 'template', 'md.hbs'));
+  try {
+    fs.accessSync(imageDir)
+  } catch (e) {
+    fs.mkdirSync(imageDir);
+  }
+  rules.forEach(rule => {
+    var fileOut = path.join(imageDir, rule.name + '.svg');
+    var content = rule.diagram.replace(/<svg ([^>]*)>/, (match, a) => `${svgPreamble}\n<svg xmlns="http://www.w3.org/2000/svg" version="1.1" ${a}>\n${svgHeader}`)
+    fs.writeFileSync(fileOut, content);
+  })
+}
 
-fs.writeFileSync(program.output, html, 'utf-8');
+fs.writeFileSync(program.output, output, 'utf-8');
 console.log('generated ' + program.output);

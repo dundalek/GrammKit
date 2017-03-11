@@ -14,6 +14,9 @@ Is uses the [railroad-diagrams](https://github.com/tabatkins/railroad-diagrams) 
 
 To generate static html page run `grammkit yourgrammar.peg`.
 
+To generate markdown file run `grammkit -t md yourgrammar.peg`.
+This will generate separate SVG files and a markdown file that includes them.
+
 ## Use the library
 
 `npm install grammkit`

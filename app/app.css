@@ -1,0 +1,27 @@
+body {
+  background-color: hsl(30,20%,95%);
+}
+
+input[type=text].form-control, textarea.form-control {
+  background-color:  hsl(30,20%,98%);;
+}
+
+.load-examples {
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+.load-examples a {
+  margin-left: 10px;
+}
+
+textarea.form-control.grammar-edit {
+  height: 400px;
+  margin-bottom: 20px;
+  font-family: monospace;
+}
+
+.alert {
+  word-wrap: break-word;
+}

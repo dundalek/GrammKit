@@ -36,7 +36,7 @@ gulp.task('copy:libs', function() {
 })
 
 gulp.task('copy:files', function() {
-  return gulp.src('app/{index.html,style.css}', {base: 'app/'})
+  return gulp.src('app/{index.html,*.css}', {base: 'app/'})
     .pipe(gulp.dest('dist/'));
 });
 

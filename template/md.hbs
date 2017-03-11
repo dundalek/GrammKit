@@ -1,0 +1,15 @@
+
+# {{title}}
+{{#rules}}
+
+## {{name}}
+
+![{{name}}]({{../imageDir}}/{{name}}.svg)
+
+{{#if usedBy.length}}
+Used by: {{#usedBy}}[{{this}}](#{{this}}){{#unless @last}}, {{/unless}}{{/usedBy}}
+{{/if}}
+{{#if references.length}}
+References: {{#references}}[{{this}}](#{{this}}){{#unless @last}}, {{/unless}}{{/references}}
+{{/if}}
+{{/rules}}
