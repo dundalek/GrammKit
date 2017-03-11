@@ -1,6 +1,6 @@
 {
   "name": "grammkit",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A tool to generate diagrams for parser grammars",
   "main": "grammkit.js",
   "scripts": {
