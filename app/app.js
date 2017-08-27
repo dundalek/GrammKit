@@ -8,9 +8,25 @@ var parseEbnf = require('../lib/parse-ebnf.pegjs').parse;
 var diagram = require('../lib/diagram');
 var getReferences = require('../lib/peg-references');
 
+var diagramOhm = require('../lib/ohm-rd.js');
+
 var examples = require('./examples.json');
 var exampleGrammar = examples[0].source;
 examples = examples.slice(1);
+
+function processPeg(grammarAst) {
+  var rules = grammarAst.rules.map(function(rule) {
+    return {
+      name: rule.name,
+      diagram: diagram(rule)
+    };
+  });
+  var references = getReferences(grammarAst);
+  return {
+    references,
+    rules
+  };
+}
 
 var App = React.createClass({
   mixins: [
@@ -34,19 +50,14 @@ var App = React.createClass({
   getInitialState() {
     return {
       examples: examples,
-      grammarAst: {rules: []}
+      grammarAst: {rules: [], references: []}
     };
   },
-  
+
   render() {
     var e = this.state.syntaxError;
-    var rules = this.state.grammarAst.rules.map(function(rule) {
-      return {
-        name: rule.name,
-        diagram: diagram(rule)
-      };
-    });
-    var references = getReferences(this.state.grammarAst);
+    var { references, rules } = this.state.grammarAst;
+
     return (
       <div>
         <div className="col-md-6">
@@ -67,7 +78,7 @@ var App = React.createClass({
           {this.state.loadError && <div className="alert alert-danger">
             {this.state.loadError}
           </div>}
-          
+
           <div className={cx({'has-error': this.state.syntaxError})}>
             <textarea className="form-control grammar-edit" value={this.state.grammar} onChange={this.onChangeGrammar} />
             {this.state.syntaxError && <pre className="alert alert-danger">
@@ -78,7 +89,7 @@ var App = React.createClass({
             </pre>}
           </div>
         </div>
-        
+
         <div className="col-md-6">
           {rules.map(rule =>
             <div>
@@ -100,56 +111,68 @@ var App = React.createClass({
       </div>
     );
   },
-  
+
   onChangeGrammar(ev) {
     this.setState({grammar: ev.target.value});
     this.updateGrammarDebounced(ev.target.value);
   },
-  
+
   onSwitchGrammar(link, ev) {
     this.loadGrammar(link);
   },
-  
+
   onLoadGrammar() {
     this.loadGrammar(this.state.link);
   },
-  
+
   onKeyPress(ev) {
     if (ev.which === 13) {
       // load grammar on enter
       this.loadGrammar(this.state.link);
     }
   },
-  
+
   onClickDiagram(ev) {
     // if the node was clicked then go to rule definition
     if (ev.target.tagName === 'text') {
       location.hash = ev.target.textContent;
     }
   },
-  
+
   updateGrammar(grammar) {
     var state = {
       grammar: grammar,
       syntaxError: null
     };
-    
+
     try {
-      state.grammarAst = parse(grammar);
+      state.grammarAst = processPeg(parse(grammar));
     } catch (e) {
       e.lineCode = grammar.split('\n')[e.line-1];
       state.syntaxError = e;
       try {
-        state.grammarAst = parseEbnf(grammar);
+        state.grammarAst = processPeg(parseEbnf(grammar));
         state.syntaxError = null;
       } catch (e) {
-        // ignore EBNF error, report only PEG error
+        try {
+          var rules = diagramOhm(grammar)[0].arguments.map(function(rule) {
+            return {
+              name: rule.name,
+              diagram: diagram.diagramRd(rule.diagram)
+            };
+          });
+          state.grammarAst = {rules, references: []};
+          state.syntaxError = null;
+        } catch (e) {
+          // ignore EBNF error, report only PEG error
+        }
+
       }
     }
 
     this.setState(state);
   },
-  
+
   loadGrammar(link) {
     link = link.trim().replace(/^https?:\/\/github.com\/|https?:\/\/raw.githubusercontent.com\//, 'https://cdn.rawgit.com/');
     location.hash = link;

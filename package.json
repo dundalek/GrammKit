@@ -18,6 +18,7 @@
     "handlebars": "^4.0.5",
     "jsesc": "^0.5.0",
     "lodash": "^4.17.2",
+    "ohm-js": "harc/ohm#b7db5de9c68e62dd053ebc535c3dbec348e039bb",
     "pegjs": "^0.8.0",
     "railroad-diagrams": "^1.0.0",
     "react": "^0.12.2",
