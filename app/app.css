@@ -7,9 +7,8 @@ input[type=text].form-control, textarea.form-control {
 }
 
 .load-examples {
-  margin-left: 20px;
   margin-top: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
 }
 
 .load-examples a {

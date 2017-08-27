@@ -33,6 +33,12 @@ var App = React.createClass({
     React.addons.LinkedStateMixin
   ],
 
+  formats: {
+    pegjs: 'PEG.js',
+    ebnf: 'EBNF',
+    ohm: 'Ohm',
+  },
+
   componentWillMount() {
     this.updateGrammarDebounced = debounce(this.updateGrammar, 150).bind(this);
     if (location.hash) {
@@ -50,31 +56,47 @@ var App = React.createClass({
   getInitialState() {
     return {
       examples: examples,
-      grammarAst: {rules: [], references: []}
+      grammarAst: {rules: [], references: []},
+      format: 'auto',
+      detectedFormat: null
     };
   },
 
   render() {
     var e = this.state.syntaxError;
+    var { format, detectedFormat } = this.state;
     var { references, rules } = this.state.grammarAst;
 
     return (
       <div>
         <div className="col-md-6">
           <div className={cx('load-input', 'row', {'has-error': this.state.loadError})}>
-            <div className="col-md-8 col-sm-8 col-xs-7">
-              <input className="form-control" type="text" valueLink={this.linkState('link')} onKeyPress={this.onKeyPress} placeholder="e.g. http://server.com/grammar.pegjs" />
-            </div>
-            <button className="btn btn-primary col-md-3 col-sm-3 col-xs-4" onClick={this.onLoadGrammar} disabled={this.state.loading}>
-              {this.state.loading ? 'Loading...' : 'Load Grammar'}
-            </button>
+            <form onSubmit={this.onLoadGrammar}>
+              <div className="col-md-8 col-sm-8 col-xs-7">
+                <input className="form-control" type="text" valueLink={this.linkState('link')}  placeholder="e.g. http://server.com/grammar.pegjs" />
+              </div>
+              <button className="btn btn-primary col-md-3 col-sm-3 col-xs-4" type="submit" disabled={this.state.loading}>
+                {this.state.loading ? 'Loading...' : 'Load Grammar'}
+              </button>
+            </form>
           </div>
           <p className="load-examples">
+            Format:{" "}
+            <select value={format} onChange={this.onChangeFormat}>
+              <option value="auto">Auto-detect</option>
+              {Object.keys(this.formats).map(k =>
+                <option key={k} value={k}>{this.formats[k]}</option>
+              )}
+            </select>
+            {format === 'auto' && !!detectedFormat &&
+            <span> Detected: {this.formats[detectedFormat]}</span>}
+          </p>
+          <div className="load-examples">
             Try some examples:
             {this.state.examples.map(example =>
-              <a href={'#'+example.link} onClick={this.onSwitchGrammar.bind(this, example.link)}>{example.name}</a>
+              <a href={'#'+example.link} onClick={this.onSwitchGrammar.bind(this, example.link, example.format)}>{example.name}</a>
             )}
-          </p>
+          </div>
           {this.state.loadError && <div className="alert alert-danger">
             {this.state.loadError}
           </div>}
@@ -117,19 +139,13 @@ var App = React.createClass({
     this.updateGrammarDebounced(ev.target.value);
   },
 
-  onSwitchGrammar(link, ev) {
-    this.loadGrammar(link);
+  onSwitchGrammar(link, format, ev) {
+    this.loadGrammar(link, format);
   },
 
-  onLoadGrammar() {
+  onLoadGrammar(ev) {
+    ev.preventDefault();
     this.loadGrammar(this.state.link);
-  },
-
-  onKeyPress(ev) {
-    if (ev.which === 13) {
-      // load grammar on enter
-      this.loadGrammar(this.state.link);
-    }
   },
 
   onClickDiagram(ev) {
@@ -139,41 +155,66 @@ var App = React.createClass({
     }
   },
 
-  updateGrammar(grammar) {
-    var state = {
-      grammar: grammar,
-      syntaxError: null
-    };
-
-    try {
-      state.grammarAst = processPeg(parse(grammar));
-    } catch (e) {
-      e.lineCode = grammar.split('\n')[e.line-1];
-      state.syntaxError = e;
-      try {
-        state.grammarAst = processPeg(parseEbnf(grammar));
-        state.syntaxError = null;
-      } catch (e) {
-        try {
-          var rules = diagramOhm(grammar)[0].arguments.map(function(rule) {
-            return {
-              name: rule.name,
-              diagram: diagram.diagramRd(rule.diagram)
-            };
-          });
-          state.grammarAst = {rules, references: []};
-          state.syntaxError = null;
-        } catch (e) {
-          // ignore EBNF error, report only PEG error
-        }
-
-      }
-    }
-
-    this.setState(state);
+  onChangeFormat(ev) {
+    this.updateGrammar(this.state.grammar, ev.target.value);
   },
 
-  loadGrammar(link) {
+  updateGrammar(grammar, format) {
+    format = format || this.state.format;
+    var state = {
+      grammar: grammar,
+      syntaxError: null,
+      format,
+      detectedFormat: null
+    };
+
+    switch (format) {
+      case 'auto':
+      case 'pegjs':
+        try {
+          state.grammarAst = processPeg(parse(grammar));
+          state.detectedFormat = 'pegjs';
+          return this.setState(state);
+        } catch (e) {
+          if (format !== 'auto') {
+            e.lineCode = grammar.split('\n')[e.line-1];
+            state.syntaxError = e;
+            return this.setState(state);
+          }
+        }
+      case 'ebnf':
+        try {
+          state.grammarAst = processPeg(parseEbnf(grammar));
+          state.detectedFormat = 'ebnf';
+          return this.setState(state);
+        } catch (e) {
+          if (format !== 'auto') {
+            state.syntaxError = e;
+            return this.setState(state);
+          }
+        }
+      case 'ohm':
+      try {
+        var rules = diagramOhm(grammar)[0].arguments.map(function(rule) {
+          return {
+            name: rule.name,
+            diagram: diagram.diagramRd(rule.diagram)
+          };
+        });
+        state.grammarAst = {rules, references: []};
+        state.detectedFormat = 'ohm';
+        return this.setState(state);
+      } catch (e) {
+        if (format !== 'auto') {
+          state.syntaxError = e;
+          return this.setState(state);
+        }
+      }
+    }
+  },
+
+  loadGrammar(link, format) {
+    format = format || 'auto';
     link = link.trim().replace(/^https?:\/\/github.com\/|https?:\/\/raw.githubusercontent.com\//, 'https://cdn.rawgit.com/');
     location.hash = link;
     this.setState({
@@ -182,13 +223,15 @@ var App = React.createClass({
       rules: [],
       loading: true,
       loadError: null,
+      format,
+      detectedFormat: null
     });
     request(link, function(er, response, body) {
       this.setState({loading: false})
       if (er || response.status !== 200) {
         this.setState({loadError: '' + (er || body)});
       } else {
-        this.updateGrammar(body);
+        this.updateGrammar(body, format);
       }
     }.bind(this))
   }
