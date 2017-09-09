@@ -36,6 +36,12 @@ The SVG renders as:
 
 ![Diagram Example](example.png)
 
+## Development
+
+Clone repo and install dependencies with `npm install`.
+
+Run `npm run dev` and open browser at http://localhost:3000/dist/ .
+
 ## Related projects
 
 List of other project worth checking out.
