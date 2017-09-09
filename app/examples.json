@@ -5,6 +5,9 @@
   "name": "SPARQL\u00a0(EBNF)",
   "link": "./examples/sparql.ebnf"
 }, {
+  "name": "Bash\u00a0(ohm)",
+  "link": "https://raw.githubusercontent.com/nfischer/shelljs-transpiler/master/src/bash.ohm"
+}, {
   "name": "ArchieML",
   "link": "https://cdn.rawgit.com/dundalek/archieml-peg/6d882f42de57d850f72772cde9aadc7a4ee579bf/aml.parser.pegjs"
 }, {

@@ -2,10 +2,10 @@
 
 GrammKit is a tool for generating syntax diagrams (also known as railroad diagrams) for parser grammars. Check out the [online version](http://dundalek.com/GrammKit/).
 
-Currently two grammar formats are supported:
+Currently these grammar formats are supported:
 - [PEG.js](http://pegjs.org) - it is parsed into internal AST of PEG.js which is then translated using [peg-rd.js](./lib/peg-rd.js).
 - [EBNF](http://www.w3.org/TR/2004/REC-xml11-20040204/#sec-notation) defined in W3C standards - it parsed into AST using [parse-ebnf.pegjs](./lib/parse-ebnf.pegjs)
-- [Ohm](https://github.com/harc/ohm) support is in progress. Translation will be done using semantic actions in [ohm-rd.js](./lib/ohm-rd.js)
+- [Ohm](https://github.com/harc/ohm) - translation is done using semantic actions in [ohm-rd.js](./lib/ohm-rd.js)
 
 Is uses the [railroad-diagrams](https://github.com/tabatkins/railroad-diagrams) library to generate SVG images.
 
