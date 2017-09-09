@@ -8,7 +8,8 @@ var parseEbnf = require('../lib/parse-ebnf.pegjs').parse;
 var diagram = require('../lib/diagram');
 var getReferences = require('../lib/peg-references');
 
-var diagramOhm = require('../lib/ohm-rd.js');
+var diagramOhm = require('../lib/ohm-rd');
+var getReferencesOhm = require('../lib/ohm-references');
 
 var examples = require('./examples.json');
 var exampleGrammar = examples[0].source;
@@ -222,7 +223,8 @@ var App = React.createClass({
         }
       case 'ohm':
       try {
-        state.grammarAst = diagramOhm(grammar).map(grammar => {
+        var references = getReferencesOhm(grammar);
+        state.grammarAst = diagramOhm(grammar).map((grammar, i) => {
           var rules = grammar.arguments.map(function(rule) {
             return {
               name: rule.name,
@@ -230,7 +232,11 @@ var App = React.createClass({
             };
           });
 
-          return {rules, name: grammar.name, references: []};
+          return {
+            rules,
+            name: grammar.name,
+            references: references[i]
+          };
         });
         state.detectedFormat = 'ohm';
         return this.setState(state);
