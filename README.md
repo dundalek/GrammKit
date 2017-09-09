@@ -42,6 +42,10 @@ Clone repo and install dependencies with `npm install`.
 
 Run `npm run dev` and open browser at http://localhost:3000/dist/ .
 
+Here is an overview how the format conversion works:
+
+![Overview](./doc/overview.svg)
+
 ## Related projects
 
 List of other project worth checking out.

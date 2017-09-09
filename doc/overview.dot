@@ -1,0 +1,15 @@
+// dot -Tsvg overview.dot -o overview.svg
+
+digraph G {
+    rankdir="LR"
+    edge [comment="Wildcard node added automatic in EG."];
+    node [comment="Wildcard node added automatic in EG."];
+    "PEG-AST" [label="PEG AST"];
+    "RDX" [label="RD"];
+    "PEG" -> "PEG-AST"  [label="pegjs parse"];
+    "EBNF" -> "PEG-AST"  [label="parse-ebnf.pegjs"];
+    "PEG-AST" -> "RD"  [label="peg-rd"];
+    "OHM" -> "RD"  [label="ohm-rd"];
+    "RD" -> "RDX"  [label="rd-optimize-loops"];
+    "RDX" -> "SVG"  [label="rd-string"];
+}
