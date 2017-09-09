@@ -62,10 +62,37 @@ var App = React.createClass({
     };
   },
 
+  formatError(e) {
+    var errorMessage = '';
+    if (e) {
+      if (e.stack) {
+        return e.stack;
+      }
+      if (e.name) {
+        errorMessage += e.name;
+        if (e.line && e.column) {
+          errorMessage += ` on line ${e.line}, column ${e.column}`;
+        }
+        errorMessage += ':\n';
+      }
+      if (e.column && e.lineCode) {
+        errorMessage += new Array(e.column).join(' ') + '\u2193\n'
+        errorMessage += e.lineCode + '\n';
+      }
+      if (errorMessage) {
+        errorMessage += '\n';
+      }
+      errorMessage += e.message ? e.message : e;
+    }
+
+    return errorMessage;
+  },
+
   render() {
     var e = this.state.syntaxError;
-    var { format, detectedFormat } = this.state;
+    var { format, detectedFormat, syntaxError } = this.state;
     var { references, rules } = this.state.grammarAst;
+
 
     return (
       <div>
@@ -80,7 +107,7 @@ var App = React.createClass({
               </button>
             </form>
           </div>
-          <p className="load-examples">
+          <div className="load-examples row">
             Format:{" "}
             <select value={format} onChange={this.onChangeFormat}>
               <option value="auto">Auto-detect</option>
@@ -90,24 +117,21 @@ var App = React.createClass({
             </select>
             {format === 'auto' && !!detectedFormat &&
             <span> Detected: {this.formats[detectedFormat]}</span>}
-          </p>
-          <div className="load-examples">
-            Try some examples:
+          </div>
+          <div className="load-examples row">
+            <span>Try some examples:</span><br/>
             {this.state.examples.map(example =>
               <a href={'#'+example.link} onClick={this.onSwitchGrammar.bind(this, example.link, example.format)}>{example.name}</a>
             )}
           </div>
-          {this.state.loadError && <div className="alert alert-danger">
+          {this.state.loadError && <div className="row alert alert-danger">
             {this.state.loadError}
           </div>}
 
-          <div className={cx({'has-error': this.state.syntaxError})}>
+          <div className={cx('row', {'has-error': syntaxError})}>
             <textarea className="form-control grammar-edit" value={this.state.grammar} onChange={this.onChangeGrammar} />
-            {this.state.syntaxError && <pre className="alert alert-danger">
-              {e.name} on line {e.line}, column {e.column}:{'\n'}
-              {new Array(e.column).join(' ')}|{'\n'}
-              {e.lineCode}{'\n\n'}
-              {e.message}
+            {syntaxError && <pre className="alert alert-danger">
+              {this.formatError(syntaxError)}
             </pre>}
           </div>
         </div>
@@ -211,6 +235,9 @@ var App = React.createClass({
         }
       }
     }
+
+    state.syntaxError = {message: 'Could not auto-detect a format.'};
+    this.setState(state);
   },
 
   loadGrammar(link, format) {

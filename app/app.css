@@ -13,6 +13,7 @@ input[type=text].form-control, textarea.form-control {
 
 .load-examples a {
   margin-left: 10px;
+  float: left;
 }
 
 textarea.form-control.grammar-edit {

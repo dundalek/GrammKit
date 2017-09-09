@@ -6,7 +6,7 @@ var webpackConfig = require('./webpack.config');
 
 gulp.task('build', ['webpack', 'copy']);
 
-gulp.task('dev', function(callback) {
+gulp.task('dev', ['copy'], function(callback) {
   var config = webpackConfig({hot: true});
   new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
