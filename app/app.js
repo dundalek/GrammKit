@@ -56,7 +56,7 @@ var App = React.createClass({
   getInitialState() {
     return {
       examples: examples,
-      grammarAst: {rules: [], references: []},
+      grammarAst: [],
       format: 'auto',
       detectedFormat: null
     };
@@ -91,8 +91,6 @@ var App = React.createClass({
   render() {
     var e = this.state.syntaxError;
     var { format, detectedFormat, syntaxError } = this.state;
-    var { references, rules } = this.state.grammarAst;
-
 
     return (
       <div>
@@ -120,8 +118,8 @@ var App = React.createClass({
           </div>
           <div className="load-examples row">
             <span>Try some examples:</span><br/>
-            {this.state.examples.map(example =>
-              <a href={'#'+example.link} onClick={this.onSwitchGrammar.bind(this, example.link, example.format)}>{example.name}</a>
+            {this.state.examples.map((example, key) =>
+              <a key={key} href={'#'+example.link} onClick={this.onSwitchGrammar.bind(this, example.link, example.format)}>{example.name}</a>
             )}
           </div>
           {this.state.loadError && <div className="row alert alert-danger">
@@ -137,20 +135,25 @@ var App = React.createClass({
         </div>
 
         <div className="col-md-6">
-          {rules.map(rule =>
-            <div>
-              <h3 id={rule.name}>{rule.name}</h3>
-              <div dangerouslySetInnerHTML={{__html: rule.diagram}} onClick={this.onClickDiagram} />
-              {references[rule.name] && references[rule.name].usedBy.length > 0 && <div>
-                Used By: {references[rule.name].usedBy.map(rule =>
-                  <a href={'#' + rule}> {rule} </a>
-                )}
-              </div>}
-              {references[rule.name] && references[rule.name].references.length > 0 && <div>
-                References: {references[rule.name].references.map(rule =>
-                  <a href={'#' + rule}> {rule} </a>
-                )}
-              </div>}
+          {this.state.grammarAst.map(({ rules, references, name }, key) =>
+            <div key={key}>
+              {!!name && <h2>{name}</h2>}
+              {rules.map((rule, key) =>
+                <div key={key}>
+                  <h3 id={rule.name}>{rule.name}</h3>
+                  <div dangerouslySetInnerHTML={{__html: rule.diagram}} onClick={this.onClickDiagram} />
+                  {references[rule.name] && references[rule.name].usedBy.length > 0 && <div>
+                    Used By: {references[rule.name].usedBy.map((rule, key) =>
+                      <a key={key} href={'#' + rule}> {rule} </a>
+                    )}
+                  </div>}
+                  {references[rule.name] && references[rule.name].references.length > 0 && <div>
+                    References: {references[rule.name].references.map((rule, key) =>
+                      <a key={key} href={'#' + rule}> {rule} </a>
+                    )}
+                  </div>}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -196,7 +199,7 @@ var App = React.createClass({
       case 'auto':
       case 'pegjs':
         try {
-          state.grammarAst = processPeg(parse(grammar));
+          state.grammarAst = [processPeg(parse(grammar))];
           state.detectedFormat = 'pegjs';
           return this.setState(state);
         } catch (e) {
@@ -208,7 +211,7 @@ var App = React.createClass({
         }
       case 'ebnf':
         try {
-          state.grammarAst = processPeg(parseEbnf(grammar));
+          state.grammarAst = [processPeg(parseEbnf(grammar))];
           state.detectedFormat = 'ebnf';
           return this.setState(state);
         } catch (e) {
@@ -219,13 +222,16 @@ var App = React.createClass({
         }
       case 'ohm':
       try {
-        var rules = diagramOhm(grammar)[0].arguments.map(function(rule) {
-          return {
-            name: rule.name,
-            diagram: diagram.diagramRd(rule.diagram)
-          };
+        state.grammarAst = diagramOhm(grammar).map(grammar => {
+          var rules = grammar.arguments.map(function(rule) {
+            return {
+              name: rule.name,
+              diagram: diagram.diagramRd(rule.diagram)
+            };
+          });
+
+          return {rules, name: grammar.name, references: []};
         });
-        state.grammarAst = {rules, references: []};
         state.detectedFormat = 'ohm';
         return this.setState(state);
       } catch (e) {
@@ -247,7 +253,7 @@ var App = React.createClass({
     this.setState({
       link: link,
       grammar: '',
-      rules: [],
+      grammarAst: [],
       loading: true,
       loadError: null,
       format,
