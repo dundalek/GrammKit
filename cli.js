@@ -6,13 +6,8 @@ var fs = require('fs');
 var program = require('commander');
 var handlebars = require('handlebars');
 
-var parse = require('pegjs/lib/parser').parse;
 var grammkit = require('./grammkit');
-var getReferences = require('./lib/peg-references');
-
-var peg = require('pegjs');
-var parseEbnf = peg.buildParser(fs.readFileSync(path.join(__dirname, 'lib/parse-ebnf.pegjs'), 'utf-8')).parse;
-
+var { transform, formatError } = require('./lib/util');
 var version = require('./package.json').version;
 
 var renderTemplate = function(data, templatePath) {
@@ -24,7 +19,7 @@ var renderTemplate = function(data, templatePath) {
 program
     .version(version)
     .usage('[options] <grammar_file>')
-    // .option('-f, --input-format <from>', 'input-format (auto|ebnf|pegjs) [default: auto]', /^(auto|ebnf|pegjs)$/, 'auto')
+    .option('-f, --input-format <from>', 'input-format (auto|ebnf|ohm|pegjs) [default: auto]', /^(auto|ebnf|ohm|pegjs)$/, 'auto')
     .option('-t, --output-format <to>', 'output format (html|md) [default: html]', /^(html|md)$/, 'html')
     .option('-o, --output <output>', 'output file', null)
     .parse(process.argv);
@@ -48,30 +43,28 @@ if (program.output === null) {
 }
 
 var content = fs.readFileSync(input, 'utf-8');
-var grammar;
 try {
-    grammar = parse(content);
-} catch (pegError) {
-    try {
-        grammar = parseEbnf(content);
-    } catch (ebnfError) {
-        console.log('Cannot parse the grammar.')
-        console.log('PEG error', pegError);
-        console.log('EBNF error', ebnfError);
-        process.exit(1);
-    }
+  var result = transform(content, program.inputFormat);
+} catch (e) {
+  console.log('Parsing error:\n' + formatError(e));
+  process.exit(1);
 }
-var References = getReferences(grammar);
-var rules = grammar.rules.map(function(rule) {
-    const _ref = References[rule.name] || null;
-    const usedBy = (_ref && _ref.usedBy) || null;
-    const references = (_ref && _ref.references) || null;
+
+var grammars = result.procesedGrammars.map(({ rules, references, name }) => {
+  var rules = rules.map(function(rule) {
+    const ref = references[rule.name] || {};
     return {
-        name: rule.name,
-        diagram: grammkit.diagram(rule),
-        usedBy: usedBy,
-        references: references
+      name: rule.name,
+      diagram: rule.diagram,
+      usedBy: ref.usedBy,
+      references: ref.references
     };
+  });
+
+  return {
+    name,
+    rules
+  };
 });
 
 var output;
@@ -80,7 +73,7 @@ if (program.outputFormat === 'html') {
   var data = {
       title: title,
       style: style,
-      rules: rules
+      grammars: grammars
   };
   output = renderTemplate(data, path.join(__dirname, 'template', 'viewer.html'));
 } else if (program.outputFormat === 'md') {
@@ -93,7 +86,7 @@ if (program.outputFormat === 'html') {
   var imageDir = path.format(p);
   var data = {
       title: title,
-      rules: rules,
+      grammars: grammars,
       imageDir: imageDir
   };
   output = renderTemplate(data, path.join(__dirname, 'template', 'md.hbs'));
@@ -102,7 +95,7 @@ if (program.outputFormat === 'html') {
   } catch (e) {
     fs.mkdirSync(imageDir);
   }
-  rules.forEach(rule => {
+  [].concat.apply([], grammars.map(g => g.rules)).forEach(rule => {
     var fileOut = path.join(imageDir, rule.name + '.svg');
     var content = rule.diagram.replace(/<svg ([^>]*)>/, (match, a) => `${svgPreamble}\n<svg xmlns="http://www.w3.org/2000/svg" version="1.1" ${a}>\n${svgHeader}`)
     fs.writeFileSync(fileOut, content);
@@ -110,4 +103,4 @@ if (program.outputFormat === 'html') {
 }
 
 fs.writeFileSync(program.output, output, 'utf-8');
-console.log('generated ' + program.output);
+console.log('Parsed ' + result.detectedFormat + ' grammar and generated ' + program.output);

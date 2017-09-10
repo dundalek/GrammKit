@@ -3,31 +3,11 @@ var request = require('browser-request');
 var debounce = require('debounce');
 var cx = require('classnames');
 
-var parse = require('pegjs/lib/parser').parse;
-var parseEbnf = require('../lib/parse-ebnf.pegjs').parse;
-var diagram = require('../lib/diagram');
-var getReferences = require('../lib/peg-references');
-
-var diagramOhm = require('../lib/ohm-rd');
-var getReferencesOhm = require('../lib/ohm-references');
+var { transform, formatError } = require('../lib/util');
 
 var examples = require('./examples.json');
 var exampleGrammar = examples[0].source;
 examples = examples.slice(1);
-
-function processPeg(grammarAst) {
-  var rules = grammarAst.rules.map(function(rule) {
-    return {
-      name: rule.name,
-      diagram: diagram(rule)
-    };
-  });
-  var references = getReferences(grammarAst);
-  return {
-    references,
-    rules
-  };
-}
 
 var App = React.createClass({
   mixins: [
@@ -57,36 +37,10 @@ var App = React.createClass({
   getInitialState() {
     return {
       examples: examples,
-      grammarAst: [],
+      procesedGrammars: [],
       format: 'auto',
       detectedFormat: null
     };
-  },
-
-  formatError(e) {
-    var errorMessage = '';
-    if (e) {
-      if (e.stack) {
-        return e.stack;
-      }
-      if (e.name) {
-        errorMessage += e.name;
-        if (e.line && e.column) {
-          errorMessage += ` on line ${e.line}, column ${e.column}`;
-        }
-        errorMessage += ':\n';
-      }
-      if (e.column && e.lineCode) {
-        errorMessage += new Array(e.column).join(' ') + '\u2193\n'
-        errorMessage += e.lineCode + '\n';
-      }
-      if (errorMessage) {
-        errorMessage += '\n';
-      }
-      errorMessage += e.message ? e.message : e;
-    }
-
-    return errorMessage;
   },
 
   render() {
@@ -130,13 +84,13 @@ var App = React.createClass({
           <div className={cx('row', {'has-error': syntaxError})}>
             <textarea className="form-control grammar-edit" value={this.state.grammar} onChange={this.onChangeGrammar} />
             {syntaxError && <pre className="alert alert-danger">
-              {this.formatError(syntaxError)}
+              {formatError(syntaxError)}
             </pre>}
           </div>
         </div>
 
         <div className="col-md-6">
-          {this.state.grammarAst.map(({ rules, references, name }, key) =>
+          {this.state.procesedGrammars.map(({ rules, references, name }, key) =>
             <div key={key}>
               {!!name && <h2>{name}</h2>}
               {rules.map((rule, key) =>
@@ -196,59 +150,13 @@ var App = React.createClass({
       detectedFormat: null
     };
 
-    switch (format) {
-      case 'auto':
-      case 'pegjs':
-        try {
-          state.grammarAst = [processPeg(parse(grammar))];
-          state.detectedFormat = 'pegjs';
-          return this.setState(state);
-        } catch (e) {
-          if (format !== 'auto') {
-            e.lineCode = grammar.split('\n')[e.line-1];
-            state.syntaxError = e;
-            return this.setState(state);
-          }
-        }
-      case 'ebnf':
-        try {
-          state.grammarAst = [processPeg(parseEbnf(grammar))];
-          state.detectedFormat = 'ebnf';
-          return this.setState(state);
-        } catch (e) {
-          if (format !== 'auto') {
-            state.syntaxError = e;
-            return this.setState(state);
-          }
-        }
-      case 'ohm':
-      try {
-        var references = getReferencesOhm(grammar);
-        state.grammarAst = diagramOhm(grammar).map((grammar, i) => {
-          var rules = grammar.arguments.map(function(rule) {
-            return {
-              name: rule.name,
-              diagram: diagram.diagramRd(rule.diagram)
-            };
-          });
-
-          return {
-            rules,
-            name: grammar.name,
-            references: references[i]
-          };
-        });
-        state.detectedFormat = 'ohm';
-        return this.setState(state);
-      } catch (e) {
-        if (format !== 'auto') {
-          state.syntaxError = e;
-          return this.setState(state);
-        }
-      }
+    try {
+      state = Object.assign(state, transform(grammar, format));
+    } catch (e) {
+      state.syntaxError = e;
+      state.procesedGrammars = [];
     }
 
-    state.syntaxError = {message: 'Could not auto-detect a format.'};
     this.setState(state);
   },
 
@@ -259,7 +167,7 @@ var App = React.createClass({
     this.setState({
       link: link,
       grammar: '',
-      grammarAst: [],
+      procesedGrammars: [],
       loading: true,
       loadError: null,
       format,

@@ -15,9 +15,11 @@ module.exports = function(options) {
       publicPath: '/dist/'
     },
     plugins: options.hot ? [
+      new webpack.IgnorePlugin(/fs|path/),
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoErrorsPlugin()
     ] : [
+      new webpack.IgnorePlugin(/fs|path/),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.UglifyJsPlugin(),
       new webpack.optimize.OccurenceOrderPlugin()

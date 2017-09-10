@@ -29,9 +29,11 @@
 	<body>
 		<div class="container">
 			<h1>{{title}}</h1>
+      {{#grammars}}
+      <h2>{{name}}</h2>
 			{{#rules}}
 			  <div class="rule">
-					<h2 id={{name}}>{{name}}</h2>
+					<h3 id={{name}}>{{name}}</h3>
 					<div onclick=svgBlockClick>
 						{{{diagram}}}
 					</div>
@@ -49,6 +51,7 @@
 					</div>
 				</div>
 			{{/rules}}
+			{{/grammars}}
 		</div>
 	</body>
 </html>
