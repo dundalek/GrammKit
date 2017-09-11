@@ -46,6 +46,13 @@ Here is an overview how the format conversion works:
 
 ![Overview](./doc/overview.svg)
 
+## Changelog
+
+### v0.6.0
+
+- Add support for ohm grammars
+- Choose different formats in web app and cli
+
 ## Related projects
 
 List of other project worth checking out.
