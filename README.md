@@ -48,6 +48,10 @@ Here is an overview how the format conversion works:
 
 ## Changelog
 
+### v0.6.1
+
+- Update ohm dependency
+
 ### v0.6.0
 
 - Add support for ohm grammars
