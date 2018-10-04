@@ -1,6 +1,5 @@
 var React = require('react/addons');
 var request = require('browser-request');
-var debounce = require('debounce');
 var cx = require('classnames');
 
 var { transform, formatError } = require('../lib/util');
@@ -21,7 +20,7 @@ var App = React.createClass({
   },
 
   componentWillMount() {
-    this.updateGrammarDebounced = debounce(this.updateGrammar, 150).bind(this);
+    this.updateGrammarDebounced = _.debounce(this.updateGrammar.bind(this), 150);
     if (location.hash) {
       var hash = location.hash.replace(/^#/, '');
       if (hash.match(/^https?:\/\/|\.\//)) {
