@@ -31,7 +31,7 @@ gulp.task("webpack", function() {
 gulp.task('copy', ['copy:files', 'copy:libs', 'copy:examples']);
 
 gulp.task('copy:libs', function() {
-  return gulp.src('node_modules/bootstrap/dist/css/bootstrap.min.css', {base: 'node_modules/bootstrap/dist/css/'})
+  return gulp.src('node_modules/bootstrap-css-only/css/bootstrap.min.css', {base: 'node_modules/bootstrap-css-only/css/'})
     .pipe(gulp.dest('dist/'));
 })
 
