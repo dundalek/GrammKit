@@ -48,6 +48,14 @@ Here is an overview how the format conversion works:
 
 ## Changelog
 
+### v0.6.3
+
+- Fix onclick events for SVG elements ([#13](https://github.com/dundalek/GrammKit/pull/13))
+
+### v0.6.2
+
+- Bump dependencies to satisfy npm audit
+
 ### v0.6.1
 
 - Update ohm dependency
