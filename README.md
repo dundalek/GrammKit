@@ -1,5 +1,8 @@
 # GrammKit
 
+[![Build status on CircleCI](https://circleci.com/gh/dundalek/GrammKit.svg?style=shield)](https://circleci.com/gh/dundalek/GrammKit) [![npm version](https://img.shields.io/npm/v/grammkit.svg)](https://www.npmjs.com/package/grammkit)
+
+
 GrammKit is a tool for generating syntax diagrams (also known as railroad diagrams) for parser grammars. Check out the [online version](http://dundalek.com/GrammKit/).
 
 Currently these grammar formats are supported:
