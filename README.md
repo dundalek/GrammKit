@@ -51,6 +51,10 @@ Here is an overview how the format conversion works:
 
 ## Changelog
 
+### v0.7.0
+
+- Fixed compatibility with latest version of pegjs (v0.10.0)
+
 ### v0.6.3
 
 - Fix onclick events for SVG elements ([#13](https://github.com/dundalek/GrammKit/pull/13))
