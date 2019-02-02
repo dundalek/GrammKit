@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var React = require('react/addons');
 var request = require('browser-request');
 var cx = require('classnames');
