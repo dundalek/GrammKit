@@ -17,6 +17,7 @@ var App = React.createClass({
   formats: {
     pegjs: 'PEG.js',
     ebnf: 'EBNF',
+    abnf: 'ABNF',
     ohm: 'Ohm',
   },
 

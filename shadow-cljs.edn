@@ -1,0 +1,5 @@
+{:source-paths ["src/"]
+ :dependencies [[instaparse "1.4.9"]]
+ :builds {:abnf {:target :node-library
+                 :output-to "lib/parse-abnf.js"
+                 :exports {:parse grammkit.abnf/parse}}}}

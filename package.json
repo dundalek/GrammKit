@@ -4,9 +4,13 @@
   "description": "A tool to generate diagrams for parser grammars",
   "main": "grammkit.js",
   "scripts": {
-    "dev": "parcel --no-cache app/index.html",
-    "build": "parcel build -d dist app/index.html && shx cp -r examples dist",
-    "test": "jest"
+    "dev": "npm run build-cljs && npm run copy:examples && parcel --no-cache app/index.html",
+    "build": "npm run build-cljs && parcel build -d dist app/index.html && npm run copy:examples",
+    "copy:examples": "shx cp -r examples dist",
+    "test": "jest",
+    "dev-cljs": "shadow-cljs watch abnf",
+    "build-cljs": "shadow-cljs release abnf",
+    "prepublishOnly": "npm run build-cljs"
   },
   "bin": "./cli.js",
   "dependencies": {
@@ -27,7 +31,8 @@
     "parcel-bundler": "1.11.0",
     "parcel-plugin-pegjs": "github:dundalek/parcel-plugin-pegjs",
     "react": "0.12.2",
-    "shx": "^0.3.2"
+    "shadow-cljs": "2.7.25",
+    "shx": "0.3.2"
   },
   "repository": {
     "type": "git",
