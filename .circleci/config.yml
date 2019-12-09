@@ -35,3 +35,6 @@ jobs:
 
       # run tests!
       - run: yarn test
+
+      # Try to run build
+      - run: yarn build
