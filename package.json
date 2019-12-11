@@ -23,11 +23,11 @@
     "bootstrap-css-only": "3.3.7",
     "browser-request": "0.3.3",
     "classnames": "1.1.4",
-    "jest": "^25.0.0",
-    "parcel-bundler": "^1.12.4",
+    "jest": "25.0.0",
+    "parcel-bundler": "1.12.4",
     "parcel-plugin-pegjs": "github:dundalek/parcel-plugin-pegjs",
     "react": "0.12.2",
-    "shx": "^0.3.2"
+    "shx": "0.3.2"
   },
   "repository": {
     "type": "git",
