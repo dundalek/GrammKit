@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var React = require('react/addons');
+var React = require('react');
 var request = require('browser-request');
 var cx = require('classnames');
 
@@ -10,14 +10,16 @@ var exampleGrammar = examples[0].source;
 examples = examples.slice(1);
 
 var App = React.createClass({
-  mixins: [
-    React.addons.LinkedStateMixin
-  ],
 
   formats: {
     pegjs: 'PEG.js',
     ebnf: 'EBNF',
     ohm: 'Ohm',
+  },
+
+  handleChange(e) {
+    const {name, value} = e.currentTarget;
+    this.setState({[name]: value});
   },
 
   componentWillMount() {
@@ -53,7 +55,7 @@ var App = React.createClass({
           <div className={cx('load-input', 'row', {'has-error': this.state.loadError})}>
             <form onSubmit={this.onLoadGrammar}>
               <div className="col-md-8 col-sm-8 col-xs-7">
-                <input className="form-control" type="text" valueLink={this.linkState('link')}  placeholder="e.g. http://server.com/grammar.pegjs" />
+                <input className="form-control" type="text" name="link" value={this.state.link} onChange={this.handleChange} placeholder="e.g. http://server.com/grammar.pegjs" />
               </div>
               <button className="btn btn-primary col-md-3 col-sm-3 col-xs-4" type="submit" disabled={this.state.loading}>
                 {this.state.loading ? 'Loading...' : 'Load Grammar'}
