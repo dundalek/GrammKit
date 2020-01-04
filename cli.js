@@ -6,7 +6,7 @@ var fs = require('fs');
 var program = require('commander');
 var handlebars = require('handlebars');
 
-var grammkit = require('./grammkit');
+// var grammkit = require('./grammkit');
 var { transform, formatError } = require('./lib/util');
 var version = require('./package.json').version;
 
@@ -51,7 +51,7 @@ try {
 }
 
 var grammars = result.procesedGrammars.map(({ rules, references, name }) => {
-  var rules = rules.map(function(rule) {
+  rules = rules.map(function(rule) {
     const ref = references[rule.name] || {};
     return {
       name: rule.name,
@@ -67,24 +67,24 @@ var grammars = result.procesedGrammars.map(({ rules, references, name }) => {
   };
 });
 
-var output;
+var output, style, data;
 if (program.outputFormat === 'html') {
-  var style = fs.readFileSync(path.join(__dirname, 'app', 'diagram.css'), 'utf-8') + '\n' + fs.readFileSync(path.join(__dirname, 'app', 'app.css'), 'utf-8')
-  var data = {
+  style = fs.readFileSync(path.join(__dirname, 'app', 'diagram.css'), 'utf-8') + '\n' + fs.readFileSync(path.join(__dirname, 'app', 'app.css'), 'utf-8')
+  data = {
       title: title,
       style: style,
       grammars: grammars
   };
   output = renderTemplate(data, path.join(__dirname, 'template', 'viewer.html'));
 } else if (program.outputFormat === 'md') {
-  var style = fs.readFileSync(path.join(__dirname, 'app', 'diagram.css'), 'utf-8')
+  style = fs.readFileSync(path.join(__dirname, 'app', 'diagram.css'), 'utf-8')
   var svgPreamble = `<?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">`;
   var svgHeader = `<defs><style type="text/css"><![CDATA[ ${style} ]]></style></defs>`
   delete p.ext;
   var imageDir = path.format(p);
-  var data = {
+  data = {
       title: title,
       grammars: grammars,
       imageDir: imageDir

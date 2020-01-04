@@ -47,7 +47,7 @@ var App = createReactClass({
   },
 
   render() {
-    var e = this.state.syntaxError;
+    // var e = this.state.syntaxError;
     var { format, detectedFormat, syntaxError } = this.state;
 
     return (
@@ -124,7 +124,7 @@ var App = createReactClass({
     this.updateGrammarDebounced(ev.target.value);
   },
 
-  onSwitchGrammar(link, format, ev) {
+  onSwitchGrammar(link, format /* , ev */) {
     this.loadGrammar(link, format);
   },
 
