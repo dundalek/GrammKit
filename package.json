@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "parcel --no-cache app/index.html",
     "build": "parcel build -d dist app/index.html && shx cp -r examples dist",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "bin": "./cli.js",
   "dependencies": {
