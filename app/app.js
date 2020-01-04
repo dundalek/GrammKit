@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var React = require('react');
+var createReactClass = require('create-react-class');
 var request = require('browser-request');
 var cx = require('classnames');
 
@@ -9,7 +10,7 @@ var examples = require('./examples.json');
 var exampleGrammar = examples[0].source;
 examples = examples.slice(1);
 
-var App = React.createClass({
+var App = createReactClass({
 
   formats: {
     pegjs: 'PEG.js',
@@ -22,7 +23,7 @@ var App = React.createClass({
     this.setState({[name]: value});
   },
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.updateGrammarDebounced = _.debounce(this.updateGrammar.bind(this), 150);
     if (location.hash) {
       var hash = location.hash.replace(/^#/, '');
