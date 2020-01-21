@@ -6,7 +6,6 @@ var fs = require('fs');
 var program = require('commander');
 var handlebars = require('handlebars');
 
-// var grammkit = require('./grammkit');
 var { transform, formatError } = require('./lib/util');
 var version = require('./package.json').version;
 

@@ -47,7 +47,6 @@ var App = createReactClass({
   },
 
   render() {
-    // var e = this.state.syntaxError;
     var { format, detectedFormat, syntaxError } = this.state;
 
     return (
