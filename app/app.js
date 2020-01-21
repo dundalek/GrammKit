@@ -164,7 +164,7 @@ var App = createReactClass({
 
   loadGrammar(link, format) {
     format = format || 'auto';
-    link = link.trim().replace(/^https?:\/\/github.com\/|https?:\/\/raw.githubusercontent.com\//, 'https://cdn.rawgit.com/');
+    link = link.trim().replace(/^https?:\/\/github.com\/([^\/]+)\/([^\/]+)\/blob\//, 'https://raw.githubusercontent.com/$1/$2/');
     location.hash = link;
     this.setState({
       link: link,
