@@ -24,7 +24,7 @@ var App = createReactClass({
   },
 
   UNSAFE_componentWillMount() {
-    this.updateGrammarDebounced = _.debounce(this.updateGrammar.bind(this), 150);
+    this.updateGrammarDebounced = _.debounce(() => this.updateGrammar, 150);
     if (location.hash) {
       var hash = location.hash.replace(/^#/, '');
       if (hash.match(/^https?:\/\/|\.\//)) {
@@ -77,7 +77,7 @@ var App = createReactClass({
           <div className="load-examples row">
             <span>Try some examples:</span><br/>
             {this.state.examples.map((example, key) =>
-              <a key={key} href={'#'+example.link} onClick={this.onSwitchGrammar.bind(this, example.link, example.format)}>{example.name}</a>
+              <a key={key} href={'#'+example.link} onClick={() => this.onSwitchGrammar(example.link, example.format)}>{example.name}</a>
             )}
           </div>
           {this.state.loadError && <div className="row alert alert-danger">
@@ -176,14 +176,14 @@ var App = createReactClass({
       format,
       detectedFormat: null
     });
-    request(link, function(er, response, body) {
+    request(link, (er, response, body) => {
       this.setState({loading: false})
       if (er || response.status !== 200) {
         this.setState({loadError: '' + (er || body)});
       } else {
         this.updateGrammar(body, format);
       }
-    }.bind(this))
+    })
   }
 });
 
