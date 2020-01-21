@@ -51,6 +51,11 @@ Here is an overview how the format conversion works:
 
 ## Changelog
 
+### v0.7.1
+
+- Bumped up dependencies to make npm audit happy ([#20](https://github.com/dundalek/GrammKit/pull/20))
+- Removed references to rawgit.com since it shut down ([#21](https://github.com/dundalek/GrammKit/issues/21))
+
 ### v0.7.0
 
 - Fixed compatibility with latest version of pegjs (v0.10.0)
