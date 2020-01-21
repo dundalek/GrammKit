@@ -38,3 +38,6 @@ jobs:
 
       # Try to run build
       - run: yarn build
+
+      # Check the linter
+      - run: yarn lint
