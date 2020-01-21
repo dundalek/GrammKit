@@ -21,7 +21,7 @@
     "whitescape": "0.5.0"
   },
   "devDependencies": {
-    "bootstrap-css-only": "4.3.1",
+    "bootstrap-css-only": "3.3.7",
     "browser-request": "0.3.3",
     "classnames": "2.2.6",
     "create-react-class": "^15.6.3",
