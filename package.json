@@ -4,15 +4,16 @@
   "description": "A tool to generate diagrams for parser grammars",
   "main": "grammkit.js",
   "scripts": {
+    "lint": "eslint --report-unused-disable-directives .",
     "dev": "parcel --no-cache app/index.html",
     "build": "parcel build -d dist app/index.html && shx cp -r examples dist",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "bin": "./cli.js",
   "dependencies": {
-    "commander": "2.9.0",
+    "commander": "4.0.1",
     "handlebars": "4.5.3",
-    "jsesc": "0.5.0",
+    "jsesc": "2.5.2",
     "lodash": "4.17.15",
     "ohm-js": "0.14.0",
     "pegjs": "0.10.0",
@@ -20,13 +21,17 @@
     "whitescape": "0.5.0"
   },
   "devDependencies": {
-    "bootstrap-css-only": "3.3.7",
+    "bootstrap-css-only": "4.3.1",
     "browser-request": "0.3.3",
-    "classnames": "1.1.4",
+    "classnames": "2.2.6",
+    "create-react-class": "^15.6.3",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.17.0",
     "jest": "25.0.0",
     "parcel-bundler": "1.12.4",
     "parcel-plugin-pegjs": "github:dundalek/parcel-plugin-pegjs",
-    "react": "0.12.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "shx": "0.3.2"
   },
   "repository": {
