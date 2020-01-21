@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint --report-unused-disable-directives .",
     "dev": "parcel --no-cache app/index.html",
-    "build": "parcel build -d dist app/index.html && shx cp -r examples dist",
+    "build": "rm -rf dist/* && parcel build --public-url ./ -d dist app/index.html && shx cp -r examples dist",
     "test": "jest --coverage"
   },
   "bin": "./cli.js",
