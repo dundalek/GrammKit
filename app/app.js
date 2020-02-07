@@ -55,7 +55,7 @@ var App = createReactClass({
           <div className={cx('load-input', 'row', {'has-error': this.state.loadError})}>
             <form onSubmit={this.onLoadGrammar}>
               <div className="col-md-8 col-sm-8 col-xs-7">
-                <input className="form-control" type="text" name="link" value={this.state.link} onChange={this.handleChange} placeholder="e.g. http://server.com/grammar.pegjs" />
+                <input className="form-control" type="text" name="link" value={this.state.link} onChange={this.handleChange} placeholder="e.g. https://server.com/grammar.pegjs" />
               </div>
               <button className="btn btn-primary col-md-3 col-sm-3 col-xs-4" type="submit" disabled={this.state.loading}>
                 {this.state.loading ? 'Loading...' : 'Load Grammar'}

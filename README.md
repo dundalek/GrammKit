@@ -3,11 +3,11 @@
 [![Build status on CircleCI](https://circleci.com/gh/dundalek/GrammKit.svg?style=shield)](https://circleci.com/gh/dundalek/GrammKit) [![npm version](https://img.shields.io/npm/v/grammkit.svg)](https://www.npmjs.com/package/grammkit)
 
 
-GrammKit is a tool for generating syntax diagrams (also known as railroad diagrams) for parser grammars. Check out the [online version](http://dundalek.com/GrammKit/).
+GrammKit is a tool for generating syntax diagrams (also known as railroad diagrams) for parser grammars. Check out the [online version](https://dundalek.com/GrammKit/).
 
 Currently these grammar formats are supported:
-- [PEG.js](http://pegjs.org) - it is parsed into internal AST of PEG.js which is then translated using [peg-rd.js](./lib/peg-rd.js).
-- [EBNF](http://www.w3.org/TR/2004/REC-xml11-20040204/#sec-notation) defined in W3C standards - it parsed into AST using [parse-ebnf.pegjs](./lib/parse-ebnf.pegjs)
+- [PEG.js](https://pegjs.org) - it is parsed into internal AST of PEG.js which is then translated using [peg-rd.js](./lib/peg-rd.js).
+- [EBNF](https://www.w3.org/TR/2004/REC-xml11-20040204/#sec-notation) defined in W3C standards - it parsed into AST using [parse-ebnf.pegjs](./lib/parse-ebnf.pegjs)
 - [Ohm](https://github.com/harc/ohm) - translation is done using semantic actions in [ohm-rd.js](./lib/ohm-rd.js)
 
 Is uses the [railroad-diagrams](https://github.com/tabatkins/railroad-diagrams) library to generate SVG images.
@@ -43,7 +43,7 @@ The SVG renders as:
 
 Clone repo and install dependencies with `npm install`.
 
-Run `npm run dev` and open browser at http://localhost:3000/dist/ .
+Run `npm run dev` and open browser at https://localhost:3000/dist/ .
 
 Here is an overview how the format conversion works:
 
@@ -81,5 +81,5 @@ Here is an overview how the format conversion works:
 
 List of other project worth checking out.
 
-- [jison debugger](http://nolanlawson.github.io/jison-debugger/) - interesting visualization of a parse tree for jison grammars
+- [jison debugger](https://nolanlawson.github.io/jison-debugger/) - interesting visualization of a parse tree for jison grammars
 - [ohm interactive editor](https://ohmlang.github.io/editor/) - online editor for ohm grammars that also visualizes parse tree
