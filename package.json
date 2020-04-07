@@ -12,7 +12,7 @@
   "bin": "./cli.js",
   "dependencies": {
     "commander": "4.0.1",
-    "handlebars": "4.5.3",
+    "handlebars": "4.7.6",
     "jsesc": "2.5.2",
     "lodash": "4.17.15",
     "ohm-js": "0.14.0",
