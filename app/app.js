@@ -24,7 +24,7 @@ var App = createReactClass({
   },
 
   UNSAFE_componentWillMount() {
-    this.updateGrammarDebounced = _.debounce(() => this.updateGrammar, 150);
+    this.updateGrammarDebounced = _.debounce(this.updateGrammar, 150);
     if (location.hash) {
       var hash = location.hash.replace(/^#/, '');
       if (hash.match(/^https?:\/\/|\.\//)) {
