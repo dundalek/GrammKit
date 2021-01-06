@@ -6,19 +6,16 @@ input[type=text].form-control, textarea.form-control {
   background-color:  hsl(30,20%,98%);;
 }
 
-.load-examples {
-  margin-top: 10px;
+.load-examples a {
+  margin-right: 10px;
+}
+
+.section {
   margin-bottom: 10px;
 }
 
-.load-examples a {
-  margin-left: 10px;
-  float: left;
-}
-
 textarea.form-control.grammar-edit {
-  height: 400px;
-  margin-bottom: 20px;
+  height: 200px;
   font-family: monospace;
 }
 

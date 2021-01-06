@@ -51,18 +51,35 @@ var App = createReactClass({
 
     return (
       <div>
-        <div className="col-md-6">
-          <div className={cx('load-input', 'row', {'has-error': this.state.loadError})}>
+        <div className="container">
+          <div className={cx('load-input', 'row', 'section', {'has-error': this.state.loadError})}>
             <form onSubmit={this.onLoadGrammar}>
-              <div className="col-md-8 col-sm-8 col-xs-7">
+              <div className="col-sm-9 col-xs-7">
                 <input className="form-control" type="text" name="link" value={this.state.link} onChange={this.handleChange} placeholder="e.g. https://server.com/grammar.pegjs" />
               </div>
-              <button className="btn btn-primary col-md-3 col-sm-3 col-xs-4" type="submit" disabled={this.state.loading}>
-                {this.state.loading ? 'Loading...' : 'Load Grammar'}
-              </button>
+              <div className="col-sm-3 col-xs-5">
+                <button style={{width: "100%"}} className="btn btn-primary" type="submit" disabled={this.state.loading}>
+                  {this.state.loading ? 'Loading...' : 'Load Grammar'}
+                </button>
+              </div>
             </form>
           </div>
-          <div className="load-examples row">
+          {this.state.loadError && <div className="section alert alert-danger">
+            {this.state.loadError}
+          </div>}
+          <div className="section load-examples">
+            <span>Try&nbsp;some&nbsp;examples: </span>
+            {this.state.examples.map((example, key) =>
+              <span key={key}>
+                <a href={'#'+example.link} onClick={() => this.onSwitchGrammar(example.link, example.format)}>{example.name}</a>
+                {" "}
+              </span>
+            )}
+          </div>
+          <div className={cx('section', {'has-error': syntaxError})}>
+            <textarea className="form-control grammar-edit" value={this.state.grammar} onChange={this.onChangeGrammar} />
+          </div>
+          <div className="section">
             Format:{" "}
             <select value={format} onChange={this.onChangeFormat}>
               <option value="auto">Auto-detect</option>
@@ -73,25 +90,12 @@ var App = createReactClass({
             {format === 'auto' && !!detectedFormat &&
             <span> Detected: {this.formats[detectedFormat]}</span>}
           </div>
-          <div className="load-examples row">
-            <span>Try some examples:</span><br/>
-            {this.state.examples.map((example, key) =>
-              <a key={key} href={'#'+example.link} onClick={() => this.onSwitchGrammar(example.link, example.format)}>{example.name}</a>
-            )}
-          </div>
-          {this.state.loadError && <div className="row alert alert-danger">
-            {this.state.loadError}
-          </div>}
-
-          <div className={cx('row', {'has-error': syntaxError})}>
-            <textarea className="form-control grammar-edit" value={this.state.grammar} onChange={this.onChangeGrammar} />
-            {syntaxError && <pre className="alert alert-danger">
+          {syntaxError && <pre className="section alert alert-danger">
               {formatError(syntaxError)}
-            </pre>}
-          </div>
+          </pre>}
         </div>
 
-        <div className="col-md-6">
+        <div className="container section">
           {this.state.procesedGrammars.map(({ rules, references, name }, key) =>
             <div key={key}>
               {!!name && <h2>{name}</h2>}
