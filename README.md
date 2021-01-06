@@ -43,7 +43,7 @@ The SVG renders as:
 
 Clone repo and install dependencies with `npm install`.
 
-Run `npm run dev` and open browser at https://localhost:3000/dist/ .
+Run `npm run dev` and open browser at http://localhost:1234 .
 
 Here is an overview how the format conversion works:
 
@@ -81,5 +81,7 @@ Here is an overview how the format conversion works:
 
 List of other project worth checking out.
 
-- [jison debugger](https://nolanlawson.github.io/jison-debugger/) - interesting visualization of a parse tree for jison grammars
-- [ohm interactive editor](https://ohmlang.github.io/editor/) - online editor for ohm grammars that also visualizes parse tree
+- [Jison debugger](https://nolanlawson.github.io/jison-debugger/) - interesting visualization of a parse tree for jison grammars
+- [Ohm interactive editor](https://ohmlang.github.io/editor/) - online editor for ohm grammars that also visualizes parse tree
+- [AST Explorer](https://astexplorer.net)
+- [Godbolt Compiler Explorer](https://godbolt.org)
