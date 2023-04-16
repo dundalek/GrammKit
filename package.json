@@ -27,7 +27,7 @@
     "create-react-class": "^15.6.3",
     "eslint": "^8.38.0",
     "eslint-plugin-react": "^7.17.0",
-    "jest": "^25.5.4",
+    "jest": "^29.5.0",
     "parcel-bundler": "^1.12.5",
     "parcel-plugin-pegjs": "github:dundalek/parcel-plugin-pegjs",
     "react": "^18.2.0",
