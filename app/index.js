@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react'),
-    ReactDOM = require('react-dom'),
+    ReactDOMClient = require('react-dom/client'),
     App = require('./app');
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOMClient.createRoot(document.getElementById('app')).render(<App />);
