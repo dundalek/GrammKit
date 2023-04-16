@@ -15,7 +15,7 @@
     "handlebars": "^4.7.7",
     "jsesc": "^2.5.2",
     "lodash": "^4.17.21",
-    "ohm-js": "0.14.0",
+    "ohm-js": "^15.5.0",
     "pegjs": "0.10.0",
     "railroad-diagrams": "1.0.0",
     "whitescape": "0.5.0"
