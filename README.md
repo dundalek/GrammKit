@@ -51,6 +51,10 @@ Here is an overview how the format conversion works:
 
 ## Changelog
 
+### v0.7.2
+
+- Bumped up dependencies to make npm audit happy ([#24](https://github.com/dundalek/GrammKit/pull/24))
+
 ### v0.7.1
 
 - Bumped up dependencies to make npm audit happy ([#20](https://github.com/dundalek/GrammKit/pull/20))
